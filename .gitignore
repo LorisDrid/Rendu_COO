@@ -30,4 +30,5 @@ bin/
 
 ### autres ###
 *.iml
-.idea/
+.idea
+.idea/workspace.xml
