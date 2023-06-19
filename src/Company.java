@@ -1,8 +1,11 @@
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.function.BinaryOperator;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -52,14 +55,24 @@ public class Company {
     }
 
     /**
-     * Returns a stream of employees who are older than 25 years.
+     * Returns a stream of employees who are older than the specified age.
      *
-     * @return a stream of employees older than 25
+     * @param age the minimum age for filtering employees
+     * @return a stream of employees older than the specified age
      */
-    public Stream<Employee> getEmployeesOlderThan25() {
+    public Stream<Employee> getEmployeesOlderThan(int age) {
         return employees.stream()
-                .filter(employee -> employee.getAge() > 25);
+                .filter(employee -> employee.getAge() > age);
     }
+
+    public Stream<Employee> getEmployeesWithMaxEfficiencyByAge() {
+        Map<Integer, Employee> employeesByAge = employees.stream()
+                .collect(Collectors.toMap(Employee::getAge, e -> e,
+                        BinaryOperator.maxBy(Comparator.comparingDouble(Employee::getEfficiency))));
+
+        return employeesByAge.values().stream();
+    }
+
 
     public static void main(String[] args) throws IOException {
         Company company = new Company();
